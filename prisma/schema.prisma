@@ -15,11 +15,23 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  phone Int? @unique
-  email String? @unique
-  name String 
-  avatar String?
+  id        Int      @id @default(autoincrement())
+  phone     Int?     @unique
+  email     String?  @unique
+  name      String 
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tokens    Token[]
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  payload   String   @unique
+  // 실제 디비 에는 들어가지않는다. 관계만 지어줌
+  user      User     @relation(fields: [userId], references: [id])
+  // 해당 userId 가 디비에 들어감
+  userId    Int  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
