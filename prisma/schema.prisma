@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  // Vitess에서는 외래키를 지원하지 않기때문에 없는 유저의 아이디가 들어가도 에러가 나지않는다. 때문에 Prisma의 도움을 받아서 해결을 하는옵션
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  // Vitess에서 해주지 못하는 부분을 Prisma에서 해줄것이다.
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  phone Int? @unique
+  email String? @unique
+  name String 
+  avatar String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
